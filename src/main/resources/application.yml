@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: stock-ms
+  datasource:
+    url: ${DB_URL:jdbc:h2:mem:stock-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    driverClassName: ${DB_DRIVER:org.h2.Driver}
+    username: ${DB_USER:user}
+    password: ${DB_PASSWORD:passer@123}
+  jpa:
+    database-platform: ${DB_USER:org.hibernate.dialect.H2Dialect}
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+#  elasticsearch:
+#    uris: ${ELASTIC_URI:http://localhost:9200}
+#    username: ${ELASTIC_USER:elastic}
+#    password: ${ELASTIC_PASSWORD:changeme}
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+#  file:
+#    name: logs/elk-stack.log
+
+server:
+  port: 8081
+
+

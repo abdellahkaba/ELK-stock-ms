@@ -1,0 +1,12 @@
+#services:
+#  stock-ms-app:
+#    container_name: stock-ms-app
+#    image: stock-ms/stock-ms:0.0.1
+#    ports:
+#      - "8081:8081"
+#    networks:
+#      - stock-ms-net
+#
+#networks:
+#  stock-ms-net:
+#    driver: bridge
