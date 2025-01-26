@@ -7,6 +7,7 @@ default:
 
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  IMAGE_TAG: "$CI_REGISTRY/isi-dev/microservices/stock-ms:latest"
 
 run unit tests and package:
   inherit:
