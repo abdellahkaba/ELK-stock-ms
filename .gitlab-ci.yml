@@ -34,8 +34,8 @@ build docker image:
     - docker:dind
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $IMAGE_TAG .
-    - docker push $IMAGE_TAG
+    - docker build -t $CI_REGISTRY/isi-dev/microservices/stock-ms .
+    - docker push $CI_REGISTRY/isi-dev/microservices/stock-ms
   artifacts:
     paths:
       - stock-ms.tar
