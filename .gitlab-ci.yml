@@ -35,7 +35,7 @@ build docker image:
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
     - echo "Image build"
-  artefacts:
+  artifacts:
     paths:
       - stock-ms.tar
   when: manual
