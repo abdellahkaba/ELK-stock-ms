@@ -44,7 +44,10 @@ package helm chart:
   image: alpine/helm:3.12.3
   stage: helm_publish
   script:
-    - helm package ./helm/stock-ms
+    - helm lint ./stock-ms/
+    - helm package ./stock-ms
+    - ls -l stock-ms-*.tgz  # Affiche les permissions et la taille du fichier
+    - chmod 644 stock-ms-*.tgz  # Ajuste les permissions pour le fichier
     - mv stock-ms-*.tgz ./chart.tgz
     - echo "Helm chart packaged"
   artifacts:
@@ -57,9 +60,9 @@ package helm chart:
 deploy to kubernetes:
   image: alpine/helm:3.12.3
   stage: deploy
-  before_script:
-    - echo "$KUBE_CONFIG" > kubeconfig
-    - export KUBECONFIG=kubeconfig
+#  before_script:
+#    - echo "$KUBE_CONFIG" > kubeconfig
+#    - export KUBECONFIG=kubeconfig
   script:
     - helm upgrade --install stock-ms ./chart.tgz \
       --set image.repository=$CI_REGISTRY/isi-dev/microservices/stock-ms \
@@ -68,6 +71,4 @@ deploy to kubernetes:
     - echo "Deployment complete"
   only:
     - main
-
-
 
