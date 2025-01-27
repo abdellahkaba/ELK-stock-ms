@@ -1,0 +1,11 @@
+replicaCount: 2
+
+image:
+  repository: "registry.gitlab.com/isi-dev/microservices/stock-ms"
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  port: 8081
+  targetPort: 8081
+  type: NodePort
