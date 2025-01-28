@@ -1,7 +1,7 @@
 stages:
   - packaging
   - build_docker_image
-#  - helm_publish
+  - helm_publish
   - deploy
 
 default:
