@@ -10,7 +10,7 @@ default:
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
   IMAGE_TAG: "$CI_REGISTRY/isi-dev/microservices/stock-ms:latest"
-  KUBE_CONTEXT: "isi-dev/microservices/k8s-connection:k8s-connection"
+  KUBE_CONTEXT: isi-dev/microservices/k8s-connection:k8s-connection
 
 run unit tests and package:
   inherit:
@@ -28,6 +28,9 @@ run unit tests and package:
 
 # Build docker image from Docker compose
 build docker image:
+  inherit:
+    default: true
+    variables: true
   image: docker:latest
   stage: build_docker_image
   services:
@@ -39,36 +42,39 @@ build docker image:
     - echo "Image build"
   when: manual
 
-# Package Helm Chart
-#package helm chart:
-#  image: alpine/helm:3.12.3
-#  stage: helm_publish
-#  script:
-#    - helm lint ./stock-ms/
-#    - helm package ./stock-ms
-#    - ls -l stock-ms-*.tgz  # Affiche les permissions et la taille du fichier
-#    - chmod 644 stock-ms.tgz  # Ajuste les permissions pour le fichier
-#    - mv stock-ms-0.1.0.tgz ./chart.tgz
-#    - echo "Helm chart packaged"
-#  artifacts:
-#    paths:
-#      - chart.tgz
-#  only:
-#    - main
+ ## Package Helm Chart
+package helm chart:
+  stage: helm_publish
+  image:
+    name: alpine/helm:latest
+    entrypoint: ['']
+  script:
+    - helm package ./stock-ms
+    - chmod 644 stock-ms.tgz
+    - 'curl --fail-with-body --request POST --form 'chart=@stock-ms-0.1.0.tgz' --user abdellahkaba:glpat-9pYPNC-3pPpUkB6GZs-V https://gitlab.com/api/v4/projects/66535452/packages/helm/api/stable/charts'
+    - echo "Helm chart packaged"
+  artifacts:
+    paths:
+      - chart.tgz
+  only:
+    - main
 
 # Deploy using Helm
 deploy to kubernetes:
-  image: alpine/helm:3.12.3
   stage: deploy
-  before_script:
-    - echo "$KUBE_CONFIG" > kubeconfig
-    - export KUBECONFIG=kubeconfig
+  image:
+    name: dtzar/helm-kubectl
+    entrypoint: ['']
   script:
+    - echo "Deployment"
+    - kubectl config use-context $KUBE_CONTEXT
+    - helm repo add --username abdellahkaba --password glpat-9pYPNC-3pPpUkB6GZs-V stock-ms https://gitlab.com/api/v4/projects/66535452/packages/helm/api/stable/charts
+    - helm repo update
     - helm upgrade --install stock-ms ./chart.tgz \
       --set image.repository=$CI_REGISTRY/isi-dev/microservices/stock-ms \
       --set image.tag=latest \
       --kube-context=$KUBE_CONTEXT
+    - kubectl get pods
+    - kubectl get svc
     - echo "Deployment complete"
-  only:
-    - main
 
