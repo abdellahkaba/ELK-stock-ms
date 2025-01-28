@@ -1,7 +1,7 @@
 stages:
   - packaging
   - build_docker_image
-  - helm_publish
+#  - helm_publish
   - deploy
 
 default:
@@ -40,29 +40,29 @@ build docker image:
   when: manual
 
 # Package Helm Chart
-package helm chart:
-  image: alpine/helm:3.12.3
-  stage: helm_publish
-  script:
-    - helm lint ./stock-ms/
-    - helm package ./stock-ms
-    - ls -l stock-ms-*.tgz  # Affiche les permissions et la taille du fichier
-    - chmod 644 stock-ms-*.tgz  # Ajuste les permissions pour le fichier
-    - mv stock-ms-*.tgz ./chart.tgz
-    - echo "Helm chart packaged"
-  artifacts:
-    paths:
-      - chart.tgz
-  only:
-    - main
+#package helm chart:
+#  image: alpine/helm:3.12.3
+#  stage: helm_publish
+#  script:
+#    - helm lint ./stock-ms/
+#    - helm package ./stock-ms
+#    - ls -l stock-ms-*.tgz  # Affiche les permissions et la taille du fichier
+#    - chmod 644 stock-ms.tgz  # Ajuste les permissions pour le fichier
+#    - mv stock-ms-0.1.0.tgz ./chart.tgz
+#    - echo "Helm chart packaged"
+#  artifacts:
+#    paths:
+#      - chart.tgz
+#  only:
+#    - main
 
 # Deploy using Helm
 deploy to kubernetes:
   image: alpine/helm:3.12.3
   stage: deploy
-#  before_script:
-#    - echo "$KUBE_CONFIG" > kubeconfig
-#    - export KUBECONFIG=kubeconfig
+  before_script:
+    - echo "$KUBE_CONFIG" > kubeconfig
+    - export KUBECONFIG=kubeconfig
   script:
     - helm upgrade --install stock-ms ./chart.tgz \
       --set image.repository=$CI_REGISTRY/isi-dev/microservices/stock-ms \

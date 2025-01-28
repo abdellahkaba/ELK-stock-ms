@@ -31,4 +31,7 @@ logging:
 server:
   port: 8081
 
+springdoc:
+  default-produces-media-type: application/json
+
 

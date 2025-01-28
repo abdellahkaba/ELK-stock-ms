@@ -5,6 +5,8 @@ import com.isi.stock.products.dto.ProductDtoResponse;
 import com.isi.stock.products.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/products")
 @AllArgsConstructor
+@Getter
+@Setter
 public class ProductController {
 
     private final ProductService productService;
