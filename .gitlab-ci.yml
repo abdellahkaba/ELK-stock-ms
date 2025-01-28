@@ -43,38 +43,45 @@ build docker image:
   when: manual
 
  ## Package Helm Chart
-package helm chart:
+# Helm Chart Packaging
+package_helm_chart:
   stage: helm_publish
   image:
     name: alpine/helm:latest
-    entrypoint: ['']
+    entrypoint: [""]
   script:
     - helm package ./stock-ms
-    - chmod 644 stock-ms.tgz
-    - 'curl --fail-with-body --request POST --form 'chart=@stock-ms-0.1.0.tgz' --user abdellahkaba:glpat-9pYPNC-3pPpUkB6GZs-V https://gitlab.com/api/v4/projects/66535452/packages/helm/api/stable/charts'
-    - echo "Helm chart packaged"
+    - chmod 644 stock-ms-0.1.0.tgz
+    - curl --fail-with-body --request POST \
+      --form chart=@stock-ms-0.1.0.tgz \
+      --user abdellahkaba:glpat-9pYPNC-3pPpUkB6GZs-V \
+      https://gitlab.com/api/v4/projects/66535452/packages/helm/api/stable/charts
+    - echo "Helm chart packaged successfully."
   artifacts:
     paths:
-      - chart.tgz
+      - stock-ms-0.1.0.tgz
   only:
     - main
 
-# Deploy using Helm
-deploy to kubernetes:
+# Deploy Using Helm
+deploy_to_kubernetes:
   stage: deploy
   image:
-    name: dtzar/helm-kubectl
-    entrypoint: ['']
+    name: dtzar/helm-kubectl:latest
+    entrypoint: [""]
   script:
-    - echo "Deployment"
+    - echo "Starting deployment..."
     - kubectl config use-context $KUBE_CONTEXT
-    - helm repo add --username abdellahkaba --password glpat-9pYPNC-3pPpUkB6GZs-V stock-ms https://gitlab.com/api/v4/projects/66535452/packages/helm/api/stable/charts
+    - helm repo add stock-ms https://gitlab.com/api/v4/projects/66535452/packages/helm/api/stable/charts \
+      --username abdellahkaba \
+      --password glpat-9pYPNC-3pPpUkB6GZs-V
     - helm repo update
-    - helm upgrade --install stock-ms ./chart.tgz \
+    - helm upgrade --install stock-ms stock-ms-0.1.0.tgz \
       --set image.repository=$CI_REGISTRY/isi-dev/microservices/stock-ms \
       --set image.tag=latest \
       --kube-context=$KUBE_CONTEXT
     - kubectl get pods
     - kubectl get svc
-    - echo "Deployment complete"
+    - echo "Deployment complete."
+
 
