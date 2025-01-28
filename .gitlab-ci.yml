@@ -10,8 +10,8 @@ default:
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
   IMAGE_TAG: "$CI_REGISTRY/isi-dev/microservices/stock-ms:latest"
-  KUBE_CONTEXT: isi-dev/microservices/k8s-connection:k8s-connection
-
+#  KUBE_CONTEXT: isi-dev/microservices/k8s-connection:k8s-connection
+  KUBE_CONTEXT: minikube
 run unit tests and package:
   inherit:
     default: true
