@@ -51,11 +51,8 @@ package_helm_chart:
   script:
     - helm package ./stock-ms
     - chmod 644 stock-ms-0.1.0.tgz
-    - curl --fail-with-body --request POST \
-      --form chart=@stock-ms-0.1.0.tgz \
-      --user abdellahkaba:glpat-9pYPNC-3pPpUkB6GZs-V \
-      https://gitlab.com/api/v4/projects/66535452/packages/helm/api/stable/charts
-    - echo "Helm chart packaged successfully."
+    - curl --fail-with-body --request POST --form chart=@stock-ms-0.1.0.tgz --user abdellahkaba:glpat-9pYPNC-3pPpUkB6GZs-V https://gitlab.com/api/v4/projects/66535452/packages/helm/api/stable/charts
+    - echo "Helm chart packaged and uploaded"
   artifacts:
     paths:
       - stock-ms-0.1.0.tgz
