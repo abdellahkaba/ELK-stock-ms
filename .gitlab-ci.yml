@@ -42,7 +42,6 @@ build docker image:
     - echo "Image build"
   when: manual
 
- ## Package Helm Chart
 # Helm Chart Packaging
 package_helm_chart:
   stage: helm_publish
@@ -83,5 +82,3 @@ deploy_to_kubernetes:
     - kubectl get pods
     - kubectl get svc
     - echo "Deployment complete."
-
-##################
