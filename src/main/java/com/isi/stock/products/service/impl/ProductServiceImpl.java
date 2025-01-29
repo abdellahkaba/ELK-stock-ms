@@ -28,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductsMapper productsMapper;
     private final MessageSource messageSource;
-    private final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+
 
     @Override
     @Transactional
@@ -38,7 +38,6 @@ public class ProductServiceImpl implements ProductService {
             throw new EntityExistsException(messageSource.getMessage("product.exists", new Object[]{productDto.getRef()}, Locale.getDefault()));
         }
         ProductEntity product = productsMapper.toProductEntity(productDto);
-        logger.info("Reference: {}", product);
         var productEntity = productRepository.save(product);
         return Optional.of(productsMapper.toProductDtoResponse(productEntity));
 
@@ -50,6 +49,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Optional<ProductDtoResponse> getProductByRef(String ref) {
+        log.info("getProductByRef: " + ref);
         return productRepository.findByRef(ref)
                 .map(product -> Optional.of(productsMapper.toProductDtoResponse(product)))
                 .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("product.notfound", new Object[]{ref}, Locale.getDefault())));

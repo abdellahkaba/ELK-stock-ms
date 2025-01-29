@@ -15,18 +15,14 @@ spring:
   h2:
     console:
       enabled: true
-#  elasticsearch:
-#    uris: ${ELASTIC_URI:http://localhost:9200}
-#    username: ${ELASTIC_USER:elastic}
-#    password: ${ELASTIC_PASSWORD:changeme}
 
 logging:
   level:
     org:
-      hibernate:
-        SQL: DEBUG
-#  file:
-#    name: logs/elk-stack.log
+      springframework:
+        web: DEBUG
+  file:
+    name: logs/logs.log
 
 server:
   port: 8081
