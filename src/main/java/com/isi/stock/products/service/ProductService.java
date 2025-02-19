@@ -12,6 +12,6 @@ public interface ProductService {
     Optional<List<ProductDtoResponse>> getAllProducts();
     Optional<ProductDtoResponse> getProductByRef(String ref);
     boolean deleteProduct(String ref);
-    Optional<ProductDtoResponse> updateProduct(ProductDtoRequest productDto);
+    Optional<ProductDtoResponse> updateProduct(String ref, ProductDtoRequest productDto);
 
 }

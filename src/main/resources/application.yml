@@ -22,7 +22,7 @@ logging:
       springframework:
         web: DEBUG
   file:
-    name: logs/logs.log
+    name: logstash_ingest_data/logs.log
 
 server:
   port: 8081

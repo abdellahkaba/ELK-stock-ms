@@ -1,4 +1,7 @@
 package com.isi.stock.purchases.repository;
 
-public interface PurchaseRepository {
+import com.isi.stock.purchases.entities.PurchaseEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PurchaseRepository extends JpaRepository<PurchaseEntity, Long> {
 }

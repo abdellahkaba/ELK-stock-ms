@@ -12,19 +12,19 @@
         </Console>
         <Console name="Console_JSON" target="SYSTEM_OUT" follow="true">
            <JsonLayout complete="false" compact="false">
-               <KeyValuePair key="service" value="parametrage"/>
+               <KeyValuePair key="service" value="stock-ms"/>
                <KeyValuePair key="traceId" value="$${ctx:traceId}"/>
                <KeyValuePair key="spanId" value="$${ctx:spanId}"/>
            </JsonLayout>
         </Console>
         <!-- config fichier de log -->
-        <File name="file" fileName="logs/logs.log">
+        <File name="file" fileName="logstash_ingest_data/logs.log">
             <!-- format console des logs dans le fichier -->
             <PatternLayout pattern="[%t] %-5p | %-60c | %m (%F:%L)%n" />
             <!-- format JSON des logs dans le fichier -->
-            <!-- <JsonLayout complete="false" compact="false">
-             <KeyValuePair key="service" value="stock-ms"/>
-            </JsonLayout> -->
+<!--            <JsonLayout complete="false" compact="false">-->
+<!--             <KeyValuePair key="service" value="stock-ms"/>-->
+<!--            </JsonLayout>-->
         </File>
      <!-- config fichier de log -->
     </Appenders>
@@ -44,5 +44,19 @@
              <AppenderRef ref="Console" />
         </Logger>
 
+        <Logger name="com.isi.stock.purchases.service.impl" level="debug" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
+
+        <Logger name="com.isi.stock.products.controller" level="debug" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
+
+        <Logger name="com.isi.stock.sales.controller" level="debug" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
+        <Logger name="com.isi.stock.sales.service.impl" level="debug" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
     </Loggers>
 </Configuration>

@@ -110,7 +110,7 @@ class ProductServiceImplTest {
         when(productRepository.save(any())).thenReturn(getProductEntity());
         when(productsMapper.toProductDtoResponse(any())).thenReturn(getProductDtoResponse());
 
-        Optional<ProductDtoResponse> updatedProduct = productService.updateProduct(getProductDtoRequest());
+        Optional<ProductDtoResponse> updatedProduct = productService.updateProduct("MAD01",getProductDtoRequest());
         assertTrue(updatedProduct.isPresent());
         assertEquals("MAD01", updatedProduct.get().getRef());
     }
@@ -121,7 +121,7 @@ class ProductServiceImplTest {
         when(messageSource.getMessage(eq("product.notfound"), any(), any(Locale.class)))
                 .thenReturn("Product not found");
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> productService.updateProduct(getProductDtoRequest()));
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> productService.updateProduct("MAD01" ,getProductDtoRequest()));
         assertEquals("Product not found", exception.getMessage());
     }
 

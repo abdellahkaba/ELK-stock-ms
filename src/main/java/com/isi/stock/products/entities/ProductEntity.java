@@ -1,9 +1,12 @@
 package com.isi.stock.products.entities;
 
+import com.isi.stock.purchases.entities.PurchaseEntity;
+import com.isi.stock.sales.entities.SaleEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -26,6 +29,12 @@ public class ProductEntity implements Serializable {
 
     @Column(nullable = false)
     private long idUser;
+
+    @OneToMany(mappedBy = "product")
+    private List<PurchaseEntity> purchases;
+
+    @OneToMany(mappedBy = "product")
+    private List<SaleEntity> sales;
 
 }
 

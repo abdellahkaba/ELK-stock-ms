@@ -8,10 +8,11 @@ import com.isi.stock.products.entities.ProductEntity;
 import com.isi.stock.products.mapper.ProductsMapper;
 import com.isi.stock.products.repository.ProductRepository;
 import com.isi.stock.products.service.ProductService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,9 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 @Slf4j
 public class ProductServiceImpl implements ProductService {
 
@@ -71,16 +74,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<ProductDtoResponse> updateProduct(ProductDtoRequest productDto) {
-        return productRepository.findByRef(productDto.getRef())
+    public Optional<ProductDtoResponse> updateProduct(String ref, ProductDtoRequest productDto) {
+        return productRepository.findByRef(ref) 
                 .map(product -> {
-                    product.setRef(productDto.getRef());
+                   
                     product.setName(productDto.getName());
                     product.setStock(productDto.getStock());
                     product.setIdUser(productDto.getIdUser());
+
                     var productEntity = productRepository.save(product);
                     return Optional.of(productsMapper.toProductDtoResponse(productEntity));
-                }).orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("product.notfound", new Object[]{productDto.getRef()}, Locale.getDefault())));
+                }).orElseThrow(() -> new EntityNotFoundException(
+                        messageSource.getMessage("product.notfound", new Object[]{ref}, Locale.getDefault())
+                ));
     }
+
+
+
 }
 

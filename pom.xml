@@ -141,7 +141,21 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+
 	</dependencies>
+
+
+
+
+
+
+
+
+
+
+
+
 
 	<build>
 		<finalName>stock-ms</finalName>
